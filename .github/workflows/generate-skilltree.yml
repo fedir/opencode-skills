@@ -7,7 +7,6 @@ on:
     # Prevent the action from triggering itself infinitely when it commits the JSON
     paths-ignore:
       - 'skilltree.json'
-      - 'LICENSE'
 
 permissions:
   contents: write
@@ -35,7 +34,7 @@ jobs:
               
               for file in files:
                   # Ignore the script itself, the output JSON, and optionally the README
-                  if file in ['generate_json.py', 'skilltree.json', 'README.md']:
+                  if file in ['generate_json.py', 'skilltree.json', 'README.md', 'LICENSE']:
                       continue
                       
                   rel_path = os.path.relpath(os.path.join(root, file), '.')
