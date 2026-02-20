@@ -7,6 +7,7 @@ on:
     # Prevent the action from triggering itself infinitely when it commits the JSON
     paths-ignore:
       - 'skilltree.json'
+      - 'LICENSE'
 
 permissions:
   contents: write
