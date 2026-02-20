@@ -1,0 +1,76 @@
+name: Generate Skilltree JSON
+
+on:
+  push:
+    branches:
+      - main
+    # Prevent the action from triggering itself infinitely when it commits the JSON
+    paths-ignore:
+      - 'skilltree.json'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create Python Generation Script
+        run: |
+          cat << 'EOF' > generate_json.py
+          import os
+          import json
+
+          base_url = "https://raw.githubusercontent.com/fedir/opencode-skills/refs/heads/main/"
+          result = {}
+
+          for root, dirs, files in os.walk('.'):
+              # Ignore hidden directories like .git and .github
+              dirs[:] = [d for d in dirs if not d.startswith('.')]
+              
+              for file in files:
+                  # Ignore the script itself, the output JSON, and optionally the README
+                  if file in ['generate_json.py', 'skilltree.json', 'README.md']:
+                      continue
+                      
+                  rel_path = os.path.relpath(os.path.join(root, file), '.')
+                  # Ensure we use standard forward slashes for URLs
+                  rel_path_unix = rel_path.replace('\\', '/')
+                  
+                  # Key: path without extension (e.g., rust/clippy-enforcer)
+                  key = os.path.splitext(rel_path_unix)[0]
+                  # Value: raw download URL (e.g., https://raw.../rust/clippy-enforcer.md)
+                  val = base_url + rel_path_unix
+                  
+                  result[key] = val
+
+          # Write out the JSON file
+          with open('skilltree.json', 'w') as f:
+              json.dump(result, f, indent=2)
+          EOF
+
+      - name: Execute Script
+        run: python3 generate_json.py
+
+      - name: Commit and Push changes
+        run: |
+          # Clean up the temporary python script
+          rm generate_json.py
+          
+          # Set up Git bot user
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          git add skilltree.json
+          
+          # Only commit and push if there are actual changes
+          if git diff-index --quiet HEAD; then
+            echo "No changes to commit."
+          else
+            git commit -m "chore: auto-update skilltree.json"
+            git push
+          fi
