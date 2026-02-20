@@ -6,11 +6,14 @@ You will find these instruction sets in the `.opencode/skills/` directory. If yo
 
 ### 🛠️ Available AI Skills
 
-* **Architecture & Planning (`senior-architect`):** * *Trigger:* `"Plan the architecture using the senior-architect skill."`
+* **Architecture & Planning (`senior-architect`):**
+    * *Trigger:* `"Plan the architecture using the senior-architect skill."`
     * *Use when:* You are building a new feature, module, or system. The AI will map out the data structures and ownership model *before* writing any implementation code.
-* **Debugging (`debug-pro`):** * *Trigger:* `"Fix this compiler error using the debug-pro skill."`
+* **Debugging (`debug-pro`):** 
+    * *Trigger:* `"Fix this compiler error using the debug-pro skill."`
     * *Use when:* You hit a complex compiler error or logic bug. This forces the AI to look for root-cause structural fixes rather than applying band-aid solutions.
-* **Refactoring (`clippy-enforcer` / `linter-enforcer`):** * *Trigger:* `"Refactor this code using the clippy-enforcer skill."`
+* **Refactoring (`clippy-enforcer` / `linter-enforcer`):**
+    * *Trigger:* `"Refactor this code using the clippy-enforcer skill."`
     * *Use when:* You want to clean up a file, resolve linter warnings, or ensure the code is highly idiomatic and performant.
 
 ### 💡 How to Use Them
